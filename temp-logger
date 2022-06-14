@@ -21,9 +21,9 @@ else:
 def parse_args():
 	parser = argparse.ArgumentParser(description='A Python script for logging temperature from Arduino.')
 	parser.add_argument('-f','--filename',metavar='FILENAME', type=str, nargs=1, help='Specify the filename (default is temp-log.dat).')
-	parser.add_argument('-p','--port',metavar='PORT', type=str, nargs=1, help='Specify the serial (default is COM1 in Win, ).')
-	parser.add_argument('-t','--timeout',metavar='TIMEOUT',type=int, nargs=1, help='Specify the timeout (defualt is 1s).')
-	parser.add_argument('-b','--baud',metavar='RATE',type=int, nargs=1, help='Specify the baudrate (defualt is 9600).')
+	parser.add_argument('-p','--port',metavar='PORT', type=str, nargs=1, help='Specify the serial (default is COM0 in Win, ).')
+	parser.add_argument('-t','--timeout',metavar='TIMEOUT',type=int, nargs=1, help='Specify the timeout (defualt is 4s).')
+	parser.add_argument('-b','--baud',metavar='RATE',type=int, nargs=1, help='Specify the baudrate (defualt is 115200).')
 	args = parser.parse_args()
 	if not args.filename:
 		args.filename = filename
