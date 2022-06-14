@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+
+#import packages
+import argparse
+import serial
+import sys
+
+#global
+timeout = 4
+filename = 'temp-log.dat'
+baud = 9600
+prefix_port = ''
+if sys.platform == "win32":
+	port = 'COM0'
+else:
+	prefix_port = '/dev/'
+	port = 'ttyACM0'
+
+# Parse the aruments
+def parse_args():
+	parser = argparse.ArgumentParser(description='A Python script for logging temperature from Arduino.')
+	parser.add_argument('-f','--filename',metavar='FILENAME', type=str, nargs=1, help='Specify the filename (default is temp-log.dat).')
+	parser.add_argument('-p','--port',metavar='PORT', type=str, nargs=1, help='Specify the serial (default is COM1 in Win, ).')
+	parser.add_argument('-t','--timeout',metavar='TIMEOUT',type=int, nargs=1, help='Specify the timeout (defualt is 1s).')
+	parser.add_argument('-b','--baud',metavar='RATE',type=int, nargs=1, help='Specify the baudrate (defualt is 9600).')
+	args = parser.parse_args()
+	if not args.filename:
+		args.filename = filename
+	else:
+		args.filename = args.filename[0]
+	if not args.port:
+		args.port = port
+	else:
+		args.port = args.port[0]
+	if not args.timeout:
+		args.timeout = timeout
+	else:
+		args.timeout = args.timeout[0]
+	if not args.baud:
+		args.baud = baud
+	else:
+		args.baud = args.baud[0]
+	args.port = prefix_port + args.port
+	return args
+
+
+def main():
+	#parse arguments
+	args = parse_args()
+	#open serial
+	try: 
+		ser = serial.Serial(args.port, args.baud, timeout=args.timeout)
+	except serial.SerialException as e:
+		print('invalid port: %s ' % e)
+		exit()
+	#open new file
+	try:
+		file = open(args.filename,'w',newline='')
+	except IOError as e:
+		print('unable to create file: %s' % e)
+		exit()
+	#read from serial
+	while True:
+		try:
+			try:
+				line = ser.readline()
+			except serial.SerialException as e:
+				print('Device removed: %s ' % e)
+				break
+			if line:
+				file.write(line.decode())
+				file.flush()
+				print(line.decode(),end='')
+			else:
+				print('Device removed: %s ' % e)
+				break
+		except KeyboardInterrupt:
+				print('Keyboard interrupt')
+				break
+
+	#close file
+	file.close()
+	#close serial
+	ser.close()
+	#print end
+	print("Finish")
+	#end
+	exit()
+
+# Entry point
+if __name__ == '__main__':
+	main()

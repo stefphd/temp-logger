@@ -1,2 +1,3 @@
-# temp-logger
+# Temperature logger
+
  Temperature logging from Arduino
