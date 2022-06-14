@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
-
 #import packages
 import argparse
 import serial
 import sys
+from sys import exit
 
 #global
 timeout = 4
 filename = 'temp-log.dat'
-baud = 9600
+baud = 115200
 prefix_port = ''
 if sys.platform == "win32":
 	port = 'COM0'

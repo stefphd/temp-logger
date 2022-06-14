@@ -15,5 +15,5 @@ PyInstaller.__main__.run([
     '--console',
     '--distpath','bin',
     '--workpath','.build',
-    '--noconfirm'
+    '--noconfirm','--onefile'
 ])
